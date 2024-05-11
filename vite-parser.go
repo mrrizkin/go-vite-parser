@@ -41,8 +41,27 @@ type (
 )
 
 var (
-	scriptExtensions = []string{".js", ".ts", ".jsx", ".tsx", ".mjs", ".cjs", ".wasm", ".vue", ".svelte"}
-	styleExtensions  = []string{".css", ".scss", ".sass", ".less", ".styl", ".stylus", ".pcss", ".postcss"}
+	scriptExtensions = []string{
+		".js",
+		".ts",
+		".jsx",
+		".tsx",
+		".mjs",
+		".cjs",
+		".wasm",
+		".vue",
+		".svelte",
+	}
+	styleExtensions = []string{
+		".css",
+		".scss",
+		".sass",
+		".less",
+		".styl",
+		".stylus",
+		".pcss",
+		".postcss",
+	}
 )
 
 func Parse(config Config) ViteManifestInfo {
@@ -98,6 +117,22 @@ func Parse(config Config) ViteManifestInfo {
 
 func (tags *HTMLTags) Render() string {
 	return tags.Preload + tags.CSS + tags.JS
+}
+
+func (vite *ViteManifestInfo) EntryDevTag(input string) (string, error) {
+	urlPath, err := url.JoinPath(vite.Origin, input)
+	if err != nil {
+		return "", err
+	}
+
+	extension := path.Ext(input)
+	if inArray(extension, scriptExtensions) {
+		return createScriptTag(urlPath), nil
+	} else if inArray(extension, styleExtensions) {
+		return createStyleTag(urlPath), nil
+	}
+
+	return "", nil
 }
 
 func resolveTagEntry(manifest Manifest, entryInfo EntryInfo, prefix string) HTMLTags {
