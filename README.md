@@ -58,16 +58,12 @@ document.addEventListener("DOMContentLoaded", () => {
 ```javascript
 // vite.config.js
 import { defineConfig } from "vite";
-import backendPlugin from "@nugrhrizki/vite-plugin-backend";
+import backendPlugin from "vite-plugin-backend";
 
 export default defineConfig({
   plugins: [
     backendPlugin({
-      name: "your-app",
       input: ["main.js"],
-      publicDirectory: "public",
-      buildDirectory: "build",
-      hotFile: "public/hot",
     }),
   ],
 });
