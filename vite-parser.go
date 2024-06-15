@@ -109,6 +109,7 @@ func Parse(config Config) ViteManifestInfo {
 	return ViteManifestInfo{
 		Origin:       origin,
 		Manifest:     manifest,
+		ManifestTags: manifestTags,
 		Client:       client,
 		ClientTag:    clientTag,
 		ReactRefresh: createReactRefreshTag(origin),
