@@ -135,6 +135,54 @@ func (vite *ViteManifestInfo) EntryDevTag(input string) (string, error) {
 	return "", nil
 }
 
+func (vite *ViteManifestInfo) IsDev() bool {
+	return vite.Origin != ""
+}
+
+func (vite *ViteManifestInfo) RenderTags(entry string) string {
+	tags, ok := vite.ManifestTags[entry]
+	if !ok {
+		return ""
+	}
+
+	return tags.Render()
+}
+
+func (vite *ViteManifestInfo) RenderDevTags(entry string) (string, error) {
+	return vite.EntryDevTag(entry)
+}
+
+func (vite *ViteManifestInfo) RenderEntriesTag(entries ...string) string {
+	tags := ""
+	for _, entry := range entries {
+		tags += vite.RenderTags(entry)
+	}
+
+	return tags
+}
+
+func (vite *ViteManifestInfo) RenderDevEntriesTag(entries ...string) string {
+	tags := ""
+	for _, entry := range entries {
+		tag, err := vite.RenderDevTags(entry)
+		if err != nil {
+			continue
+		}
+
+		tags += tag
+	}
+
+	return tags
+}
+
+func (vite *ViteManifestInfo) RenderClientTag() string {
+	return vite.ClientTag
+}
+
+func (vite *ViteManifestInfo) RenderReactRefreshTag() string {
+	return vite.ReactRefresh
+}
+
 func resolveTagEntry(manifest Manifest, entryInfo EntryInfo, prefix string) HTMLTags {
 	preload := ""
 	style := ""
